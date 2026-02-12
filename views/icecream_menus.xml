@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="icecream_menu_root"
+              name="Ice Cream"
+              sequence="100"/>
+
+    <menuitem id="icecream_menu_flavors"
+              name="Flavors"
+              parent="icecream_menu_root"
+              action="icecream_flavor_action"
+              sequence="10"/>
+
+</odoo>

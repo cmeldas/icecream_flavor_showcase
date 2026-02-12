@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Snippet: Ice Cream Detailed
+        Shows picture, name, description AND ingredients of featured flavors.
+        All visible text is in Czech.
+    -->
+    <template id="s_icecream_big" name="Ice Cream Detailed">
+        <section class="s_icecream_big pt-5 pb-5" data-name="Ice Cream Detailed">
+            <div class="container">
+                <div class="s_icecream_header text-center mb-5">
+                    <h2 class="s_icecream_title">🍦 Naše zmrzliny — Detailní přehled</h2>
+                    <p class="lead text-muted">Seznamte se s našimi aktuálními příchutěmi a jejich složením</p>
+                </div>
+                <div class="s_icecream_content">
+                    <div class="text-center text-muted py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Načítání...</span>
+                        </div>
+                        <p class="mt-2">Načítáme aktuální příchutě...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>

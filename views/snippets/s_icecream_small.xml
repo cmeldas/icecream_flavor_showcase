@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Snippet: Ice Cream Compact
+        Shows picture, name and description of featured flavors.
+        All visible text is in Czech.
+    -->
+    <template id="s_icecream_small" name="Ice Cream Compact">
+        <section class="s_icecream_small pt-5 pb-5" data-name="Ice Cream Compact">
+            <div class="container">
+                <div class="s_icecream_header text-center mb-4">
+                    <h2 class="s_icecream_title">🍦 Aktuální nabídka zmrzlin</h2>
+                    <p class="lead text-muted">Podívejte se, jaké příchutě dnes nabízíme</p>
+                </div>
+                <div class="row justify-content-center s_icecream_content">
+                    <div class="col-12 text-center text-muted py-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Načítání...</span>
+                        </div>
+                        <p class="mt-2">Načítáme aktuální příchutě...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>

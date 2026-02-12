@@ -1,0 +1,45 @@
+/* ============================================================
+   Ice Cream Flavor Showcase — Snippet Styles
+   ============================================================ */
+
+/* ---------- Shared ---------- */
+.s_icecream_small,
+.s_icecream_big {
+    .s_icecream_title {
+        font-weight: 700;
+    }
+}
+
+/* ---------- Compact card ---------- */
+.s_icecream_card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important;
+    }
+}
+
+.s_icecream_card_img {
+    height: 260px;
+    object-fit: cover;
+}
+
+/* ---------- Detailed row ---------- */
+.s_icecream_detail_row {
+    padding: 1.5rem 0;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+}
+
+.s_icecream_detail_img {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+    border-radius: 1rem;
+}

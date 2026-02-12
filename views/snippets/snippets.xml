@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Register our snippets in the website builder panel.
+        They appear in the "Content" group so users can drag & drop them.
+    -->
+    <template id="snippets" inherit_id="website.snippets" name="Ice Cream Flavor Snippets">
+        <xpath expr="//t[@t-snippet='website.s_parallax']" position="after">
+            <t t-snippet="icecream_flavor_showcase.s_icecream_small" group="content"/>
+            <t t-snippet="icecream_flavor_showcase.s_icecream_big" group="content"/>
+        </xpath>
+    </template>
+
+</odoo>
