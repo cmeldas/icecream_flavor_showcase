@@ -6,6 +6,18 @@ from odoo.http import request, Response
 
 class IcecreamController(http.Controller):
 
+    @http.route('/kiosk/icecream', type='http', auth='public', website=False, sitemap=False)
+    def icecream_kiosk(self):
+        """Standalone kiosk page for a 10" tablet – shows up to 2 featured flavors."""
+        flavors = request.env['icecream.flavor'].sudo().search([
+            ('is_featured', '=', True),
+            ('active', '=', True),
+        ], order='sequence, name', limit=2)
+        return request.render('icecream_flavor_showcase.kiosk_page', {
+            'flavors': flavors,
+            'flavor_count': len(flavors),
+        })
+
     @http.route('/icecream/featured', type='http', auth='public', website=True, sitemap=False)
     def get_featured_flavors(self):
         """Return the list of featured ice cream flavors as JSON."""

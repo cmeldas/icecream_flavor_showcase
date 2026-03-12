@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="kiosk_page" name="Ice Cream Kiosk">
+        <html>
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <meta http-equiv="refresh" content="60"/>
+                <title>Zmrzlina – Nabídka</title>
+                <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+                <link rel="stylesheet"
+                      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700;900&amp;display=swap"/>
+                <link rel="stylesheet"
+                      href="/web/static/lib/bootstrap/css/bootstrap.css"/>
+                <link rel="stylesheet"
+                      href="/icecream_flavor_showcase/static/src/css/kiosk.css"/>
+            </head>
+            <body class="kiosk-body">
+
+                <!-- ===== 0 flavors: full-screen logo ===== -->
+                <t t-if="flavor_count == 0">
+                    <div class="kiosk-fullscreen-logo">
+                        <img src="/icecream_flavor_showcase/static/src/img/znak_barevny.png"
+                             alt="Logo" class="kiosk-logo-big"/>
+                        <h1 class="kiosk-logo-text">Dneska zmrzlina není, třeba příště bude.</h1>
+                        <h2 class="kiosk-logo-text">Jestli máme zmrzlinu, či jakou příchuť najdete na našem webu.</h2>
+                    </div>
+                </t>
+
+                <!-- ===== 1 flavor: left flavor + right logo ===== -->
+                <t t-if="flavor_count == 1">
+                    <div class="kiosk-container">
+                        <div class="kiosk-slot">
+                            <t t-set="flavor" t-value="flavors[0]"/>
+                            <div class="kiosk-card">
+                                <div class="kiosk-img-wrap">
+                                    <t t-if="flavor.image">
+                                        <img t-attf-src="/icecream/image/#{flavor.id}"
+                                             t-att-alt="flavor.name"
+                                             class="kiosk-img"/>
+                                    </t>
+                                    <t t-else="">
+                                        <div class="kiosk-img-placeholder">
+                                            <span>🍦</span>
+                                        </div>
+                                    </t>
+                                </div>
+                                <div class="kiosk-name-bar">
+                                    <h1 class="kiosk-name" t-field="flavor.name"/>
+                                </div>
+                                <div class="kiosk-info">
+                                    <div class="kiosk-description" t-field="flavor.description"/>
+                                    <hr class="kiosk-divider"/>
+                                    <h3 class="kiosk-ingredients-title">Složení</h3>
+                                    <div class="kiosk-ingredients" t-field="flavor.ingredients"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kiosk-slot">
+                            <div class="kiosk-card kiosk-logo-slot">
+                                <img src="/icecream_flavor_showcase/static/src/img/znak_barevny.png"
+                                     alt="Logo" class="kiosk-logo-side"/>
+                                <h2 class="kiosk-logo-side-text">Dneska máme jenom jednu příchuť.</h2>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- ===== 2 flavors: both slots filled ===== -->
+                <t t-if="flavor_count == 2">
+                    <div class="kiosk-container">
+                        <t t-foreach="flavors" t-as="flavor">
+                            <div class="kiosk-slot">
+                                <div class="kiosk-card">
+                                    <div class="kiosk-img-wrap">
+                                        <t t-if="flavor.image">
+                                            <img t-attf-src="/icecream/image/#{flavor.id}"
+                                                 t-att-alt="flavor.name"
+                                                 class="kiosk-img"/>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="kiosk-img-placeholder">
+                                                <span>🍦</span>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <div class="kiosk-name-bar">
+                                        <h1 class="kiosk-name" t-field="flavor.name"/>
+                                    </div>
+                                    <div class="kiosk-info">
+                                        <div class="kiosk-description" t-field="flavor.description"/>
+                                        <hr class="kiosk-divider"/>
+                                        <h3 class="kiosk-ingredients-title">Složení</h3>
+                                        <div class="kiosk-ingredients" t-field="flavor.ingredients"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+            </body>
+            <script>
+                /* Auto-shrink flavor names:
+                   - single word: shrink until it fits container width on 1 line
+                   - multiple words: allow wrap, shrink until max 2 lines */
+                function fitNames() {
+                    document.querySelectorAll('.kiosk-name').forEach(function(el) {
+                        var text = el.textContent.trim();
+                        var words = text.split(/\s+/).length;
+                        var singleWord = words &lt;= 1;
+
+                        /* Reset */
+                        el.style.fontSize = '';
+                        el.style.whiteSpace = singleWord ? 'nowrap' : 'normal';
+
+                        var size = parseFloat(window.getComputedStyle(el).fontSize);
+                        var minSize = 16;
+
+                        if (singleWord) {
+                            /* Shrink until text fits horizontally */
+                            while (el.scrollWidth > el.clientWidth + 2 &amp;&amp; size > minSize) {
+                                size -= 2;
+                                el.style.fontSize = size + 'px';
+                            }
+                        } else {
+                            /* Shrink until text fits in max 2 lines */
+                            while (size > minSize) {
+                                var lineH = size * 1.1;
+                                if (el.scrollHeight &lt;= lineH * 2 + 2) break;
+                                size -= 2;
+                                el.style.fontSize = size + 'px';
+                            }
+                        }
+                    });
+                }
+
+                /* If ingredients overflow, switch to 2 columns */
+                function fitIngredients() {
+                    document.querySelectorAll('.kiosk-ingredients').forEach(function(el) {
+                        el.classList.remove('kiosk-ingredients-cols');
+                        if (el.scrollHeight > el.clientHeight + 2) {
+                            el.classList.add('kiosk-ingredients-cols');
+                        }
+                    });
+                }
+
+                fitNames();
+                fitIngredients();
+                window.addEventListener('resize', function() { fitNames(); fitIngredients(); });
+            </script>
+        </html>
+    </template>
+</odoo>

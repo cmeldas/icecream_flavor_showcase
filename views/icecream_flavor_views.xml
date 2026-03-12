@@ -11,6 +11,7 @@
             <kanban highlight_color="color" default_order="sequence" sample="1">
                 <field name="is_featured"/>
                 <field name="color"/>
+                <field name="total_featured_days"/>
                 <templates>
                     <t t-name="card" class="flex-row">
                         <aside>
@@ -25,6 +26,10 @@
                                 <span t-if="record.is_featured.raw_value"
                                       class="badge text-bg-success">
                                     <i class="fa fa-star me-1"/>Featured
+                                </span>
+                                <span class="ms-auto badge text-bg-info">
+                                    <i class="fa fa-calendar me-1"/>
+                                    <field name="total_featured_days"/> days
                                 </span>
                             </footer>
                         </main>
@@ -54,6 +59,7 @@
                     <group>
                         <group>
                             <field name="is_featured"/>
+                            <field name="total_featured_days"/>
                             <field name="sequence"/>
                         </group>
                         <group>
@@ -90,6 +96,7 @@
                 <field name="name"/>
                 <field name="description" optional="show"/>
                 <field name="is_featured"/>
+                <field name="total_featured_days" optional="show"/>
             </list>
         </field>
     </record>
@@ -129,6 +136,27 @@
                 Add flavors and mark them as featured to display them on your website.
             </p>
         </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Graph View — Total Featured Days (uses log model) -->
+    <!-- ============================================================ -->
+    <record id="icecream_flavor_log_view_graph" model="ir.ui.view">
+        <field name="name">icecream.flavor.log.graph</field>
+        <field name="model">icecream.flavor.log</field>
+        <field name="arch" type="xml">
+            <graph string="Days Featured" type="bar">
+                <field name="flavor_id" type="col"/>
+                <field name="days" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="icecream_flavor_stats_action" model="ir.actions.act_window">
+        <field name="name">Featured Stats</field>
+        <field name="res_model">icecream.flavor.log</field>
+        <field name="view_mode">graph,list</field>
+        <field name="search_view_id" ref="icecream_flavor_log_view_search"/>
     </record>
 
 </odoo>

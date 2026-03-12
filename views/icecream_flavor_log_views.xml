@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- Calendar View — Featured History -->
+    <!-- ============================================================ -->
+    <record id="icecream_flavor_log_view_calendar" model="ir.ui.view">
+        <field name="name">icecream.flavor.log.calendar</field>
+        <field name="model">icecream.flavor.log</field>
+        <field name="arch" type="xml">
+            <calendar string="Featured Flavors Calendar"
+                      date_start="date_from"
+                      date_stop="date_to"
+                      color="flavor_id"
+                      mode="month"
+                      quick_create="0">
+                <field name="flavor_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="days"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- List View — Featured History -->
+    <!-- ============================================================ -->
+    <record id="icecream_flavor_log_view_list" model="ir.ui.view">
+        <field name="name">icecream.flavor.log.list</field>
+        <field name="model">icecream.flavor.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="flavor_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="days"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Form View — Featured History -->
+    <!-- ============================================================ -->
+    <record id="icecream_flavor_log_view_form" model="ir.ui.view">
+        <field name="name">icecream.flavor.log.form</field>
+        <field name="model">icecream.flavor.log</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="flavor_id"/>
+                            <field name="days"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Search View -->
+    <!-- ============================================================ -->
+    <record id="icecream_flavor_log_view_search" model="ir.ui.view">
+        <field name="name">icecream.flavor.log.search</field>
+        <field name="model">icecream.flavor.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="flavor_id"/>
+                <filter name="active_now" string="Currently Featured"
+                        domain="[('date_to', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_flavor" string="Flavor"
+                            context="{'group_by': 'flavor_id'}"/>
+                    <filter name="group_month" string="Month"
+                            context="{'group_by': 'date_from:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Action -->
+    <!-- ============================================================ -->
+    <record id="icecream_flavor_log_calendar_action" model="ir.actions.act_window">
+        <field name="name">Featured Calendar</field>
+        <field name="res_model">icecream.flavor.log</field>
+        <field name="view_mode">calendar,list,form</field>
+        <field name="search_view_id" ref="icecream_flavor_log_view_search"/>
+    </record>
+
+</odoo>

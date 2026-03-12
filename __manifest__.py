@@ -30,7 +30,9 @@ Features
     'data': [
         'security/ir.model.access.csv',
         'views/icecream_flavor_views.xml',
+        'views/icecream_flavor_log_views.xml',
         'views/icecream_menus.xml',
+        'views/icecream_kiosk.xml',
         'views/snippets/s_icecream_small.xml',
         'views/snippets/s_icecream_big.xml',
         'views/snippets/snippets.xml',

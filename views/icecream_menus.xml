@@ -3,6 +3,7 @@
 
     <menuitem id="icecream_menu_root"
               name="Ice Cream"
+              web_icon="icecream_flavor_showcase,static/description/icon.png"
               sequence="100"/>
 
     <menuitem id="icecream_menu_flavors"
@@ -10,5 +11,17 @@
               parent="icecream_menu_root"
               action="icecream_flavor_action"
               sequence="10"/>
+
+    <menuitem id="icecream_menu_calendar"
+              name="Calendar"
+              parent="icecream_menu_root"
+              action="icecream_flavor_log_calendar_action"
+              sequence="20"/>
+
+    <menuitem id="icecream_menu_stats"
+              name="Stats"
+              parent="icecream_menu_root"
+              action="icecream_flavor_stats_action"
+              sequence="30"/>
 
 </odoo>
