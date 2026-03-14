@@ -51,54 +51,31 @@ class IcecreamFlavor(models.Model):
         compute='_compute_total_featured_days',
     )
 
-    @api.depends('featured_log_ids', 'featured_log_ids.date_from', 'featured_log_ids.date_to')
+    @api.depends('featured_log_ids', 'featured_log_ids.date_from')
     def _compute_total_featured_days(self):
         today = fields.Date.context_today(self)
         year_start = today.replace(month=1, day=1)
         for flavor in self:
-            total = 0
-            for log in flavor.featured_log_ids:
-                start = log.date_from or year_start
-                end = log.date_to or today
-                # Clip to current year
-                start = max(start, year_start)
-                end = max(end, year_start)
-                if start <= end:
-                    total += (end - start).days + 1
-            flavor.total_featured_days = total
+            flavor.total_featured_days = self.env['icecream.flavor.log'].search_count([
+                ('flavor_id', '=', flavor.id),
+                ('date_from', '>=', year_start),
+                ('date_from', '<=', today),
+            ])
 
-    def write(self, vals):
-        """Track featured changes: open/close log entries."""
-        if 'is_featured' in vals:
-            today = fields.Date.context_today(self)
-            for flavor in self:
-                old_val = flavor.is_featured
-                new_val = vals['is_featured']
-                if not old_val and new_val:
-                    # Becoming featured → open a new log entry
-                    self.env['icecream.flavor.log'].create({
-                        'flavor_id': flavor.id,
-                        'date_from': today,
-                    })
-                elif old_val and not new_val:
-                    # No longer featured → close the open log entry
-                    open_log = self.env['icecream.flavor.log'].search([
-                        ('flavor_id', '=', flavor.id),
-                        ('date_to', '=', False),
-                    ], limit=1)
-                    if open_log:
-                        open_log.date_to = today
-        return super().write(vals)
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        """If created as featured, open a log entry."""
-        records = super().create(vals_list)
+    @api.model
+    def _cron_snapshot_featured(self):
+        """Daily cron (runs at 15:00): record one log entry per featured flavor."""
         today = fields.Date.context_today(self)
-        for rec in records:
-            if rec.is_featured:
-                self.env['icecream.flavor.log'].create({
-                    'flavor_id': rec.id,
+        featured = self.search([('is_featured', '=', True)])
+        LogModel = self.env['icecream.flavor.log']
+        for flavor in featured:
+            existing = LogModel.search_count([
+                ('flavor_id', '=', flavor.id),
+                ('date_from', '=', today),
+            ])
+            if not existing:
+                LogModel.create({
+                    'flavor_id': flavor.id,
                     'date_from': today,
+                    'date_to': today,
                 })
-        return records
